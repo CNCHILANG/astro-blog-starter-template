@@ -1,0 +1,51 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <BaseHead title="管理后台" description="Link admin" />
+    <style>
+      body{max-width:600px;margin:2rem auto;font-family:system-ui,sans-serif;padding:0 1rem;}
+      textarea{width:100%;padding:.5rem;margin:.5rem 0;font-family:monospace;font-size:14px;border-radius:8px;border:1px solid #ccc;}
+      input{width:100%;padding:.5rem;margin:.5rem 0;border-radius:8px;border:1px solid #ccc;}
+      button{padding:.5rem 1.5rem;border:none;background:#2d8cf0;color:#fff;border-radius:8px;cursor:pointer;}
+      button:hover{background:#1a73e8;}
+    </style>
+  </head>
+  <body>
+    <h1>链接管理</h1>
+    <p>请粘贴 JSON 数组并保存：</p>
+    <textarea id="json" rows="12"></textarea>
+    <input id="token" placeholder="管理 Token(对应 PUBLIC_ADMIN_SECRET)" />
+    <button id="save">保存</button>
+    <p id="status"></p>
+
+    <script type="module">
+      async function load(){
+        const res = await fetch('/api/links');
+        const data = await res.json();
+        document.getElementById('json').value = JSON.stringify(data.links, null, 2);
+      }
+      document.getElementById('save').addEventListener('click', async () => {
+        const token = document.getElementById('token').value.trim();
+        try {
+          const links = JSON.parse(document.getElementById('json').value);
+          const res = await fetch('/api/links', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+            },
+            body: JSON.stringify({ links })
+          });
+          document.getElementById('status').textContent = res.ok ? '保存成功' : '保存失败 ' + res.status;
+        } catch (err) {
+          document.getElementById('status').textContent = '解析或保存失败: ' + err;
+        }
+      });
+      load();
+    </script>
+  </body>
+</html>
