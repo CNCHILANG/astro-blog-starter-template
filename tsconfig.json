@@ -3,6 +3,9 @@
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "module": "ES2020",
+    "target": "ES2020",
+    "moduleResolution": "node"
   }
 }

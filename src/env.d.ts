@@ -36,3 +36,9 @@ declare module "@astrojs/cloudflare" {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export type Runtime<T = any> = any;
 }
+
+// Stub for core 'astro' types used in endpoints.
+declare module "astro" {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export type APIRoute = any;
+}
