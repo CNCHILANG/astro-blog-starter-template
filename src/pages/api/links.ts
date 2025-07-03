@@ -6,10 +6,9 @@ interface Link {
   icon?: string;
 }
 
-// A simple in-memory store. In a real project, replace with KV/D1 or database.
+// Customize your default links below. Replace or remove these examples.
 let links: Link[] = [
-  { label: 'GitHub', url: 'https://github.com/yourname' },
-  { label: 'Blog', url: 'https://yourblog.com' },
+  { label: 'Website', url: 'https://example.com' },
   { label: 'Email', url: 'mailto:you@example.com' },
 ];
 
