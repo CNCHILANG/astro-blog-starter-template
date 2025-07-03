@@ -1,62 +1,108 @@
-# Astro Starter Kit: Blog
+# Glassmorphism Personal Landing Page (Astro + Cloudflare Workers)
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+This starter turns the original Astro blog template into a minimalist **liquid-glass personal landing page** with:
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+* ✨ Glassmorphism UI (blurred gradient background + translucent card)
+* 🔗 Dynamic link list powered by an API endpoint (`/api/links`)
+* 🔐 Simple admin dashboard at `/admin` to edit links (uses a bearer token)
+* ☁️ Ready to deploy to Cloudflare Workers via `wrangler`
 
-<!-- dash-content-start -->
+![screenshot](https://placehold.co/800x450?text=Preview+Screenshot)
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+---
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-<!-- dash-content-end -->
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+## 1. Quick start
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+# Install dependencies
+npm install
+
+# Start local dev server (http://localhost:4321)
+npm run dev
+
+# Build & preview production output
+npm run build && npm run preview
+
+# Deploy to Cloudflare Workers
+npm run deploy
 ```
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+If this is your first time using Cloudflare Workers, install the Wrangler CLI and log in:
 
-## 🚀 Project Structure
+```bash
+npm install -g wrangler
+wrangler login
+```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## 2. Customization guide
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+All customization can be done **without touching any build tooling**.
 
-Any static assets, like images, can be placed in the `public/` directory.
+### 2.1 Basic profile
 
-## 🧞 Commands
+Edit `src/pages/index.astro`:
 
-All commands are run from the root of the project, from a terminal:
+```astro
+<!-- Avatar image URL -->
+<img class="avatar" src="https://placehold.co/120x120.png" alt="avatar" />
 
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
+<!-- Your display name -->
+<h1>Your Name</h1>
 
-## 👀 Want to learn more?
+<!-- Short tagline / bio -->
+<p class="tagline">A short tagline about yourself</p>
+```
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Replace the image URL, name, and tagline to match your profile.
 
-## Credit
+### 2.2 Links
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+1. Navigate to `http://localhost:4321/admin` (or `/admin` in prod).
+2. Paste your links as a JSON array, e.g.
+
+```json
+[
+  { "label": "GitHub", "url": "https://github.com/you" },
+  { "label": "Blog",   "url": "https://blog.example.com" }
+]
+```
+3. Click **Save**.
+
+🚧 **Authentication** – For production, set an environment variable named `PUBLIC_ADMIN_SECRET` and use it as the bearer token in the admin page. Locally, the default secret is `changeme`.
+
+### 2.3 Styling tweaks
+
+The glassmorphism styles live in `src/styles/glass.css`. Feel free to adjust colors, blur radius, shadows, etc.
+
+---
+
+## 3. Environment variables
+
+Name | Purpose | Default
+-----|---------|--------
+`PUBLIC_ADMIN_SECRET` | Bearer token required when calling `POST /api/links` | `changeme`
+
+Set variables locally with an `.env` file or via Wrangler secrets for Cloudflare.
+
+---
+
+## 4. Project structure (important parts)
+
+```
+src/
+  pages/
+    index.astro        # Landing page (UI)
+    admin.astro        # Simple dashboard
+    api/links.ts       # GET / POST endpoint for links
+  styles/
+    glass.css          # Glassmorphism styles
+  env.d.ts             # Type declarations / env variables
+```
+
+---
+
+## 5. License
+
+MIT – use it freely in your personal or commercial projects.
